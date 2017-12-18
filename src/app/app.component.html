@@ -1,0 +1,94 @@
+<div class="box-table">
+    <div class="container box-cell">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 540 130">
+                <defs>
+                    <style>
+                    .cls-1 {
+                        fill: #61c2a6;
+                    }
+                    
+                    .cls-2 {
+                        fill: #fff;
+                    }
+                    </style>
+                </defs>
+                <title>venture</title>
+                <rect class="cls-1" x="28.01" y="28.01" width="45.01" height="11.63"></rect>
+                <path class="cls-2" d="M540,115.81H0V0H540ZM6.83,109H533.17V6.83H6.83ZM28,87.79H73.45V76.09H41V63.54H69.18V51.89H28ZM111.19,28H98V87.79h43V75.92H111.19Zm65.5,35.53h28.18V51.84H176.7V39.71h32V28h-45V87.79h45.43V76.09H176.7Zm86.94-10.25L247.92,28H233.75V87.79h13V49L263.38,74.3h.34l16.82-25.54v39h13V28H279.35Zm70,10.25h28.18V51.84H333.67V39.71h32V28h-45V87.79h45.43V76.09H333.67Zm97.19,1.28L402.84,28H390.72V87.79h13v-38l29,38h11.19V28h-13ZM462.45,28V40.14h18.19V87.79H493.8V40.14H512V28Z"></path>
+            </svg>
+        </div>
+        <div class="row" [hidden]="displayPremium">
+            <div class="col-md-12" id="head">
+                <h1> Choose your insurance modules</h1>
+            </div>
+            <form [formGroup]="insuranceModuleForm" id="insuranceModuleForm" class="col-md-12">
+                <div class="col-md-12" id="content">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6" *ngFor="let module of modules">
+                            <div class="box-col" [ngClass]="{selected: module.isSelected}">
+                                <div class="badge2"> <i class="fa fa-check"></i> </div>
+                                <h3> <b>{{module.moduleName}} </b></h3>
+                                <div class="coverage-bar">
+                                    Coverage {{ module.minimumValue}} - {{module.maximumValue}}
+                                </div>
+                                <h5 class="icn"> <img src="assets/icon-{{module.moduleName.replace(' ','_').toLowerCase()}}.png"> </h5>
+                                <div class="risk-bar">
+                                    <input type="number" min={{module.minimumValue}} max="{{module.maximumValue}}" formControlName="{{module.moduleName.replace(' ','_').toLowerCase()}}" [(ngModel)]="module.coverageValue" placeholder="Coverage Value" class="form-control" [hidden]="!module.isSelected" />
+                                </div>
+                                <div class="button-bar">
+                                    <button type="button" class="btn btn-ys" (click)="toggleSelection(module)">
+                                        {{module.isSelected ? "No, remove this" :"Yes, I want this"}} 
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" id="foot">
+                    <button type="button" class="btn btn-primary" (click)="validateAndCalculatePremium()">
+                        Calculate my premium
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div [hidden]="!displayPremium" class="row">
+            <div class="col-md-6">
+                <div class="premium-value">
+                    <h3>Your total premium is {{calculatedPremiumValue}}</h3></div>
+                You have choosen
+                <table>
+                    <tr *ngFor="let module of modules; let i=index" class="border-bottom-0">
+                        <td>
+                            <div *ngIf="module.isSelected">
+                                {{i+1}}) <b>{{module.moduleName}} </b>
+                                <div class="coverage-bar">
+                                    Coverage {{ module.coverageValue}}
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div>
+                    <button type="button" class="btn btn-primary" (click)="displayPremium=false">
+                        Let me reconfigure my plan </button>
+                </div>
+            </div>
+            <div class="col-md-6 panel panel-default">
+                <div class="panel-heading">I want to remember this</div>
+                <div class="panel-body">
+                    <form [formGroup]="emailForm" id="emailForm">
+                        <div class="input-group">
+                            <span class="input-group-addon">@</span>
+                            <input type="email" formControlName="emailAddress" [(ngModel)]="emailAddress" class="form-control">
+                        </div>
+                        <div class="emailme-button-panel">
+                            <button type="button" class="btn btn-secondary" (click)="emailMe()">
+                                Email me this plan</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
